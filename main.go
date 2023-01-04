@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"gin-todo/v2/users"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -25,6 +26,10 @@ func main() {
 
 	// with third-party context passing
 	router.GET("/post/:id", GetPost)
+
+	v1 := router.Group("/api")
+	users.UsersRegister(v1.Group("/users"))
+	v1.Use(users.AuthMiddleware(false))
 
 	// listen and serve on ... default 8000
 	router.Run(":8888")
